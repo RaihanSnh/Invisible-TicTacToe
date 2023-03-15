@@ -105,6 +105,7 @@
     const result = document.getElementById('result');
     let turn = 'X';
     let gameOver = false;
+    let count = 0;
 
     //
 
@@ -154,9 +155,10 @@ buttons.forEach(button => {
     button.addEventListener('click', () => {
         if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
             button.classList.add(turn);
+            count++;
             if (checkWinner()) {
                 showResult();
-            } else if ([...buttons].every(btn => btn.classList.contains('X') || btn.classList.contains('O'))) {
+            } else if (count === 9) {
                 showDraw();
             } else {
                 changeTurn();
