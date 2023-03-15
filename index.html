@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: #eee;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 32px;
+            text-align: center;
+            color: #333;
+        }
+
+        #board {
+            display: flex;
+            flex-wrap: wrap;
+            width: 320px;
+            margin-bottom: 32px;
+        }
+
+        button {
+  font-size: 80px;
+  width: 100px;
+  height: 100px;
+  color: transparent; /* ubah warna teks menjadi transparan */
+  background-color: transparent; /* ubah warna latar belakang menjadi transparan */
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
+        button:hover {
+            background-color: #f1f1f1;
+        }
+
+        button:focus {
+            outline: none;
+        }
+        #result {
+            font-size: 36px;
+            margin-bottom: 32px;
+            text-align: center;
+            color: #333;
+        }
+
+        #replay {
+            font-size: 24px;
+            padding: 8px 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        #replay:hover {
+            background-color: #111;
+        }
+
+        #replay:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <h1>Tic Tac Toe</h1>
+    <div id="board">
+        <button id="0"></button>
+        <button id="1"></button>
+        <button id="2"></button>
+        <button id="3"></button>
+        <button id="4"></button>
+        <button id="5"></button>
+        <button id="6"></button>
+        <button id="7"></button>
+        <button id="8"></button>
+    </div>
+    <div id="result"></div>
+    <button id="replay" onclick="location.reload()" style="display: none;">Play Again</button>
+
+</div>
+
+<script>
+    const board = document.getElementById('board');
+    const buttons = document.querySelectorAll('button');
+    const result = document.getElementById('result');
+    let turn = 'X';
+    let gameOver = false;
+
+    //
+
+
+    // fungsi untuk mengecek pemenang
+    function checkWinner() {
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+            for (let i = 0; i < winningConditions.length; i++) {
+        const [a, b, c] = winningConditions[i];
+        if (buttons[a].classList.contains(turn) && buttons[b].classList.contains(turn) && buttons[c].classList.contains(turn)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// fungsi untuk mengubah giliran
+function changeTurn() {
+    turn = turn === 'X' ? 'O' : 'X';
+}
+
+// fungsi untuk menampilkan hasil akhir
+function showResult() {
+    result.innerHTML = `${turn} Wins!`;
+    gameOver = true;
+    document.getElementById('replay').style.display = 'block';
+}
+
+// fungsi untuk menampilkan hasil akhir draw
+function showDraw() {
+    result.innerHTML = "It's a Draw!";
+    gameOver = true;
+    document.getElementById('replay').style.display = 'block';
+}
+
+// menambahkan event listener pada setiap button
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
+            button.classList.add(turn);
+            if (checkWinner()) {
+                showResult();
+            } else if ([...buttons].every(btn => btn.classList.contains('X') || btn.classList.contains('O'))) {
+                showDraw();
+            } else {
+                changeTurn();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
