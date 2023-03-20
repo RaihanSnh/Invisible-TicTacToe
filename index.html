@@ -33,7 +33,7 @@
         }
 
         .win:hover{
-            background-color: rgb(34, 190, 34);
+            background-color: rgb(30, 165, 30);
         }
         
         .lose{
@@ -84,6 +84,13 @@
 
         button:hover {
             background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        button:active{
+            background-color: #dedede;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
         }
 
         button:focus {
@@ -114,6 +121,30 @@
         #replay:focus {
             outline: none;
         }
+
+        /* Shaking animation when clicking on filled buttons.. shouldn't work in hard mode */
+        /* .X:active{
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+        .O:active{
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        } */
     </style>
 </head>
 <body>
@@ -145,6 +176,7 @@
     const buttons = document.querySelectorAll('button');
     const result = document.getElementById('result');
     const currentTurn = document.getElementById('turn');
+    let draw = false;
     let turn = 'X';
     let notTurn = 'O';
     let gameOver = false;
@@ -192,16 +224,21 @@ function showResult(x) {
 }
 
 // fungsi untuk menampilkan hasil akhir draw
-function showDraw() {
+function showDraw(x) {
     result.innerHTML = "It's a Draw!";
     currentTurn.style.display = 'none';
     gameOver = true;
     document.getElementById('replay').style.display = 'block';
+    draw = true;
+    showBlock(x);
 }
 
 function showBlock(x){
     buttons.forEach(button => {
-        if(button.classList.contains(x)){
+        if(draw){
+            button.classList.add('lose');
+        }
+        else if(button.classList.contains(x)){
             button.classList.add('win');
         }
         else if(button.classList.contains(turn) && !checkWinner()){
@@ -210,6 +247,7 @@ function showBlock(x){
         else if(button.classList.contains(notTurn) && checkWinner()){
             button.classList.add('lose');
         }
+        
     });
 }
 
@@ -222,7 +260,7 @@ buttons.forEach(button => {
             if (checkWinner()) {
                 showResult(turn);
             } else if (count === 9) {
-                showDraw();
+                showDraw(turn);
             } else {
                 changeTurn();
                 currentTurn.innerHTML = `${turn} turn`;
@@ -232,7 +270,7 @@ buttons.forEach(button => {
             showResult(notTurn);            
         }
         else if(!gameOver){
-            alert('udah dipencet');
+            // alert('Already clicked');
         }
     });
 });
