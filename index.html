@@ -17,6 +17,33 @@
             height: 100%;
         }
 
+        .nav{
+            width: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hard{
+            color: red;
+        }
+
+        .win{
+            background-color: rgb(34, 190, 34);
+        }
+
+        .win:hover{
+            background-color: rgb(30, 165, 30);
+        }
+        
+        .lose{
+            background-color: red;
+        }
+
+        .lose:hover{
+            background-color: rgb(194, 16, 16);
+        }
+
         h1 {
             font-size: 48px;
             margin-bottom: 32px;
@@ -24,30 +51,46 @@
             color: #333;
         }
 
+        a{
+            width: 50%;
+            text-align: center;
+            padding: 0px 5px 0px 5px;
+            text-decoration: none;
+            font-size: large;
+        }
+
         #board {
             display: flex;
             flex-wrap: wrap;
-            width: 320px;
+            justify-content: center;
+            width: 340px;
             margin-bottom: 32px;
         }
 
         button {
-  font-size: 80px;
-  width: 100px;
-  height: 100px;
-  color: transparent; /* ubah warna teks menjadi transparan */
-  background-color: transparent; /* ubah warna latar belakang menjadi transparan */
-  border: none;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
+            font-size: 80px;
+            width: 100px;
+            height: 100px;
+            color: transparent; /* ubah warna teks menjadi transparan */
+            background-color: transparent; /* ubah warna latar belakang menjadi transparan */
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 5px;
+        }
 
         button:hover {
             background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        button:active{
+            background-color: #dedede;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
         }
 
         button:focus {
@@ -78,11 +121,39 @@
         #replay:focus {
             outline: none;
         }
+
+        /* Shaking animation when clicking on filled buttons.. shouldn't work in hard mode */
+        /* .X:active{
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+        .O:active{
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        } */
     </style>
 </head>
 <body>
 <div class="wrapper">
-    <h1>Tic Tac Toe</h1>
+    <h1 id="title">Invisible Tic Tac Toe</h1>
+    <div class="nav">
+        <a href="?difficulty=classic">Classic</a>
+        <a href="?difficulty=hard">Hard</a>
+    </div>
     <div id="board">
         <button id="0"></button>
         <button id="1"></button>
@@ -96,19 +167,25 @@
     </div>
     <div id="result"></div>
     <button id="replay" onclick="location.reload()" style="display: none;">Play Again</button>
-
+    <div class="turn" id="turn">X turn</div>
 </div>
 
 <script>
+    const title = document.getElementById('title');
     const board = document.getElementById('board');
     const buttons = document.querySelectorAll('button');
     const result = document.getElementById('result');
+    const currentTurn = document.getElementById('turn');
+    let draw = false;
     let turn = 'X';
+    let notTurn = 'O';
     let gameOver = false;
     let count = 0;
 
-    //
-
+    if(window.location.href.indexOf('hard') != -1){
+        title.innerHTML += ' HARD MODE';
+        title.classList.add('hard');
+    }
 
     // fungsi untuk mengecek pemenang
     function checkWinner() {
@@ -122,32 +199,56 @@
             [0, 4, 8],
             [2, 4, 6]
         ];
-            for (let i = 0; i < winningConditions.length; i++) {
+        for (let i = 0; i < winningConditions.length; i++) {
         const [a, b, c] = winningConditions[i];
-        if (buttons[a].classList.contains(turn) && buttons[b].classList.contains(turn) && buttons[c].classList.contains(turn)) {
-            return true;
+            if (buttons[a].classList.contains(turn) && buttons[b].classList.contains(turn) && buttons[c].classList.contains(turn)) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
 
 // fungsi untuk mengubah giliran
 function changeTurn() {
     turn = turn === 'X' ? 'O' : 'X';
+    notTurn = notTurn === 'O' ? 'X' : 'O';
 }
 
 // fungsi untuk menampilkan hasil akhir
-function showResult() {
-    result.innerHTML = `${turn} Wins!`;
+function showResult(x) {
+    result.innerHTML = `${x} Wins!`;
+    currentTurn.style.display = 'none';
     gameOver = true;
     document.getElementById('replay').style.display = 'block';
+    showBlock(x);
 }
 
 // fungsi untuk menampilkan hasil akhir draw
-function showDraw() {
+function showDraw(x) {
     result.innerHTML = "It's a Draw!";
+    currentTurn.style.display = 'none';
     gameOver = true;
     document.getElementById('replay').style.display = 'block';
+    draw = true;
+    showBlock(x);
+}
+
+function showBlock(x){
+    buttons.forEach(button => {
+        if(draw){
+            button.classList.add('lose');
+        }
+        else if(button.classList.contains(x)){
+            button.classList.add('win');
+        }
+        else if(button.classList.contains(turn) && !checkWinner()){
+            button.classList.add('lose');
+        }
+        else if(button.classList.contains(notTurn) && checkWinner()){
+            button.classList.add('lose');
+        }
+        
+    });
 }
 
 // menambahkan event listener pada setiap button
@@ -157,12 +258,19 @@ buttons.forEach(button => {
             button.classList.add(turn);
             count++;
             if (checkWinner()) {
-                showResult();
+                showResult(turn);
             } else if (count === 9) {
-                showDraw();
+                showDraw(turn);
             } else {
                 changeTurn();
+                currentTurn.innerHTML = `${turn} turn`;
             }
+        }
+        else if(!gameOver && window.location.href.indexOf('hard') != -1){
+            showResult(notTurn);            
+        }
+        else if(!gameOver){
+            // alert('Already clicked');
         }
     });
 });
