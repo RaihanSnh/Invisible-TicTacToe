@@ -3,6 +3,11 @@
 <head>
     <title>Tic Tac Toe</title>
     <style>
+        .btnswal{
+            height: 30px;
+            box-sizing: border-box;
+            line-height: 10px;
+        }
         html, body {
             height: 100%;
             margin: 0;
@@ -122,8 +127,7 @@
             outline: none;
         }
 
-        /* Shaking animation when clicking on filled buttons.. shouldn't work in hard mode */
-        /* .X:active{
+        .X:active{
             animation: shake 0.5s;
             animation-iteration-count: infinite;
         }
@@ -144,8 +148,9 @@
             80% { transform: translate(-1px, -1px) rotate(1deg); }
             90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
-        } */
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -270,7 +275,13 @@ buttons.forEach(button => {
             showResult(notTurn);            
         }
         else if(!gameOver){
-            // alert('Already clicked');
+            Swal.fire({
+                title: 'Already clicked',
+                confirmButtonText: 'Ok',
+                customClass: {
+                    confirmButton: 'btnswal',
+                }
+            });    
         }
     });
 });
