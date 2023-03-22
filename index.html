@@ -3,11 +3,6 @@
 <head>
     <title>Tic Tac Toe</title>
     <style>
-        .btnswal{
-            height: 30px;
-            box-sizing: border-box;
-            line-height: 10px;
-        }
         html, body {
             height: 100%;
             margin: 0;
@@ -17,7 +12,7 @@
         .wrapper {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             height: 100%;
         }
@@ -68,8 +63,18 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            width: 340px;
+            align-items: center;
+            width: 500px;
             margin-bottom: 32px;
+        }
+
+        #board-container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 340px;
+            height: 340px;
+            margin: auto;
+            margin-left: 85px;
         }
 
         button {
@@ -127,6 +132,35 @@
             outline: none;
         }
 
+        #rules-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #rules-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 125px;
+            font-size: 0.8em;
+            background: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #rules-btn span {
+            display: inline-block;
+            margin: 5px 0;
+            font-size: 12px;
+            line-height: 1.2;
+            text-align: center;
+        }
+
         .X:active{
             animation: shake 0.5s;
             animation-iteration-count: infinite;
@@ -149,6 +183,11 @@
             90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
+        /*.btnswal{*/
+        /*    height: 30px;*/
+        /*    box-sizing: border-box;*/
+        /*    line-height: 10px;*/
+        /*}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -160,27 +199,32 @@
         <a href="?difficulty=hard">Hard</a>
     </div>
     <div id="board">
-        <button id="0"></button>
-        <button id="1"></button>
-        <button id="2"></button>
-        <button id="3"></button>
-        <button id="4"></button>
-        <button id="5"></button>
-        <button id="6"></button>
-        <button id="7"></button>
-        <button id="8"></button>
+        <div id="board-container">
+            <button id="0"></button>
+            <button id="1"></button>
+            <button id="2"></button>
+            <button id="3"></button>
+            <button id="4"></button>
+            <button id="5"></button>
+            <button id="6"></button>
+            <button id="7"></button>
+            <button id="8"></button>
+        </div>
+        <div id="rules-container">
+            <button id="rules-btn"><span>R<br>u<br>l<br>e<br>s</span></button>
+        </div>
     </div>
     <div id="result"></div>
     <button id="replay" onclick="location.reload()" style="display: none;">Play Again</button>
     <div class="turn" id="turn">X turn</div>
 </div>
-
 <script>
     const title = document.getElementById('title');
     const board = document.getElementById('board');
     const buttons = document.querySelectorAll('button');
     const result = document.getElementById('result');
     const currentTurn = document.getElementById('turn');
+    const rulesButton = document.getElementById('rules-btn');
     let draw = false;
     let turn = 'X';
     let notTurn = 'O';
@@ -255,6 +299,10 @@ function showBlock(x){
         
     });
 }
+//belum jadi
+    rulesButton.addEventListener('click',() => {
+        rules();
+    });
 
 // menambahkan event listener pada setiap button
 buttons.forEach(button => {
@@ -271,17 +319,17 @@ buttons.forEach(button => {
                 currentTurn.innerHTML = `${turn} turn`;
             }
         }
-        else if(!gameOver && window.location.href.indexOf('hard') != -1){
+        else if(!gameOver && window.location.href.indexOf('hard') !== -1){
             showResult(notTurn);            
         }
         else if(!gameOver){
-            Swal.fire({
-                title: 'Already clicked',
-                confirmButtonText: 'Ok',
-                customClass: {
-                    confirmButton: 'btnswal',
-                }
-            });    
+            // Swal.fire({
+            //     title: 'Already clicked',
+            //     confirmButtonText: 'Ok',
+            //     customClass: {
+            //         confirmButton: 'btnswal',
+            //     }
+            // });
         }
     });
 });
