@@ -161,11 +161,11 @@
             text-align: center;
         }
 
-        .X:active{
+        .X_hard:active{
             animation: shake 0.5s;
             animation-iteration-count: infinite;
         }
-        .O:active{
+        .O_hard:active{
             animation: shake 0.5s;
             animation-iteration-count: infinite;
         }
@@ -230,10 +230,12 @@
     let notTurn = 'O';
     let gameOver = false;
     let count = 0;
+    let isHard = false;
 
     if(window.location.href.indexOf('hard') != -1){
         title.innerHTML += ' HARD MODE';
         title.classList.add('hard');
+        isHard = true;
     }
 
     // fungsi untuk mengecek pemenang
@@ -308,7 +310,8 @@ function showBlock(x){
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
-            button.classList.add(turn);
+            const className = turn + (isHard ? '_hard' : '');
+            button.classList.add(className);
             count++;
             if (checkWinner()) {
                 showResult(turn);
