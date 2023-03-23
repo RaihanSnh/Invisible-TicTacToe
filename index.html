@@ -161,11 +161,11 @@
             text-align: center;
         }
 
-        .X_hard:active{
+        .X_classic:active{
             animation: shake 0.5s;
             animation-iteration-count: infinite;
         }
-        .O_hard:active{
+        .O_classic:active{
             animation: shake 0.5s;
             animation-iteration-count: infinite;
         }
@@ -310,7 +310,7 @@ function showBlock(x){
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
-            const className = turn + (isHard ? '_hard' : '');
+            const className = turn + (isHard ? '_hard' : '_classic');
             button.classList.add(className);
             count++;
             if (checkWinner()) {
