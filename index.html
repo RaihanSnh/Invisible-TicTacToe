@@ -50,13 +50,18 @@
             text-align: center;
             color: #333;
         }
-
-        a{
+        .diff{
             width: 50%;
             text-align: center;
             padding: 0px 5px 0px 5px;
             text-decoration: none;
             font-size: large;
+        }
+
+        .madeby{
+            text-decoration: none;
+            display: block;
+            color: #555;
         }
 
         #board {
@@ -179,20 +184,28 @@
             90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-        /*.btnswal{*/
-        /*    height: 30px;*/
-        /*    box-sizing: border-box;*/
-        /*    line-height: 10px;*/
-        /*}
+        .btnswal{
+            height: 30px;
+            background-color: #555 !important;
+            line-height: 10px;
+        }
+        .swal2-confirm:focus {
+            box-shadow: none !important;
+        }
+
+        .swal-text{
+        text-align: left;
+        }
+
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2.all.min.js"></script>
 </head>
 <body>
 <div class="wrapper">
     <h1 id="title">Invisible Tic Tac Toe</h1>
     <div class="nav">
-        <a href="?difficulty=classic">Classic</a>
-        <a href="?difficulty=hard">Hard</a>
+        <a class="diff" href="?difficulty=classic">Classic</a>
+        <a class="diff" href="?difficulty=hard">Hard</a>
     </div>
     <div id="board">
         <div id="board-container">
@@ -294,44 +307,73 @@ function showBlock(x){
         else if(button.classList.contains(notTurn) && checkWinner()){
             button.classList.add('lose');
         }
-        
+
     });
 }
-//belum jadi
-    rulesButton.addEventListener('click',() => {
-        rules();
+    function showRules(){
+        Swal.fire({
+            title: 'Rules',
+            html: '<div class="swal-text">' +
+                '<p>1. The game is played on a 3x3 board.</p>' +
+                '<p>2. The goal is to be the first player to get three of their symbols in a row (horizontally, vertically, or diagonally).</p>' +
+                '<p>3. Players take turns placing their symbols (X or O) on an empty square.</p>' +
+                '<p>4. If a player tries to place their symbol on a square that has already been filled, the square will shake as a warning.</p>' +
+                '<p>5. In Hard Mode, if a player tries to place their symbol on a square that has already been filled, their opponent will automatically win.</p>' +
+                '<p>6. The game ends when one player gets three in a row, or when all squares are filled.</p>' +
+                '</div>',
+            footer: '<div style="text-align: center; margin-top: 20px;">' +
+                'Have fun playing Invisible Tic Tac Toe! ' +
+                '<a class="madeby" href="https://github.com/RaihanSnh" target="_blank">Made By RaihanSnh</a>' +
+                '</div>',
+            confirmButtonText: "OK",
+            width: 600,
+            padding: '1em',
+            customClass: {
+                confirmButton: 'btnswal',
+            }
+        });
+    }
+
+    rulesButton.addEventListener('click', () => {
+        showRules();
+
+        if (!gameOver) {
+            currentTurn.innerHTML = `${turn} turn`;
+            changeTurn();
+        }
     });
 
-// menambahkan event listener pada setiap button
-buttons.forEach(button => {
-    button.addEventListener('click', () => {
-        if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
-            button.classList.add(turn);
-            button.classList.add('btn_' + (isHard ? 'hard' : 'classic'));
-            count++;
-            if (checkWinner()) {
-                showResult(turn);
-            } else if (count === 9) {
-                showDraw(turn);
-            } else {
-                changeTurn();
-                currentTurn.innerHTML = `${turn} turn`;
+
+    // menambahkan event listener pada setiap button
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
+                button.classList.add(turn);
+                button.classList.add('btn_' + (isHard ? 'hard' : 'classic'));
+                count++;
+                if (checkWinner()) {
+                    showResult(turn);
+                } else if (count === 9) {
+                    showDraw(turn);
+                } else {
+                    changeTurn();
+                    currentTurn.innerHTML = `${turn} turn`;
+                }
             }
-        }
-        else if(!gameOver && window.location.href.indexOf('hard') !== -1){
-            showResult(notTurn);            
-        }
-        else if(!gameOver){
-            // Swal.fire({
-            //     title: 'Already clicked',
-            //     confirmButtonText: 'Ok',
-            //     customClass: {
-            //         confirmButton: 'btnswal',
-            //     }
-            // });
-        }
+            else if(!gameOver && window.location.href.indexOf('hard') !== -1){
+                showResult(notTurn);
+            }
+            else if(!gameOver){
+                // Swal.fire({
+                //     title: 'Already clicked',
+                //     confirmButtonText: 'Ok',
+                //     customClass: {
+                //         confirmButton: 'btnswal',
+                //     }
+                // });
+            }
+        });
     });
-});
 </script>
 </body>
 </html>
