@@ -15,6 +15,8 @@
             justify-content: space-between;
             align-items: center;
             height: 100%;
+            padding: 60px 0px 60px 0px;
+            box-sizing: border-box;
         }
 
         .nav{
@@ -56,6 +58,10 @@
             padding: 0px 5px 0px 5px;
             text-decoration: none;
             font-size: large;
+        }
+
+        .footer{
+            height: 240px;
         }
 
         .madeby{
@@ -113,9 +119,9 @@
         }
         #result {
             font-size: 36px;
-            margin-bottom: 32px;
             text-align: center;
             color: #333;
+            padding-bottom: 32px;
         }
 
         #replay {
@@ -197,6 +203,9 @@
         text-align: left;
         }
 
+        .turn{
+            padding: 5px 0px 5px 0px;
+        }
     </style>
     <script src="sweetalert2.all.min.js"></script>
 </head>
@@ -220,12 +229,14 @@
             <button id="8"></button>
         </div>
         <div id="rules-container">
-            <button id="rules-btn"><span>R<br>u<br>l<br>e<br>s</span></button>
+            <button id="rules-btn" class="rules"><span>R<br>u<br>l<br>e<br>s</span></button>
         </div>
     </div>
-    <div id="result"></div>
-    <button id="replay" onclick="location.reload()" style="display: none;">Play Again</button>
-    <div class="turn" id="turn">X turn</div>
+    <div class="footer">
+        <div id="result"></div>
+        <button id="replay" onclick="location.reload()" style="display: none;">Play Again</button>
+        <div class="turn" id="turn">X turn</div>
+    </div>
 </div>
 <script>
     const title = document.getElementById('title');
@@ -347,30 +358,32 @@ function showBlock(x){
     // menambahkan event listener pada setiap button
     buttons.forEach(button => {
         button.addEventListener('click', () => {
-            if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
-                button.classList.add(turn);
-                button.classList.add('btn_' + (isHard ? 'hard' : 'classic'));
-                count++;
-                if (checkWinner()) {
-                    showResult(turn);
-                } else if (count === 9) {
-                    showDraw(turn);
-                } else {
-                    changeTurn();
-                    currentTurn.innerHTML = `${turn} turn`;
+            if(!button.classList.contains('rules')){
+                if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
+                    button.classList.add(turn);
+                    button.classList.add('btn_' + (isHard ? 'hard' : 'classic'));
+                    count++;
+                    if (checkWinner()) {
+                        showResult(turn);
+                    } else if (count === 9) {
+                        showDraw(turn);
+                    } else {
+                        changeTurn();
+                        currentTurn.innerHTML = `${turn} turn`;
+                    }
                 }
-            }
-            else if(!gameOver && window.location.href.indexOf('hard') !== -1){
-                showResult(notTurn);
-            }
-            else if(!gameOver){
-                // Swal.fire({
-                //     title: 'Already clicked',
-                //     confirmButtonText: 'Ok',
-                //     customClass: {
-                //         confirmButton: 'btnswal',
-                //     }
-                // });
+                else if(!gameOver && window.location.href.indexOf('hard') !== -1){
+                    showResult(notTurn);
+                }
+                else if(!gameOver){
+                    // Swal.fire({
+                    //     title: 'Already clicked',
+                    //     confirmButtonText: 'Ok',
+                    //     customClass: {
+                    //         confirmButton: 'btnswal',
+                    //     }
+                    // });
+                }
             }
         });
     });
