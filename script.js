@@ -105,6 +105,9 @@ buttons.forEach(button => {
         if(button.classList.contains('rules')){
             showRules();
         }
+        else if(button.classList.contains('rules')){
+            showRules();
+        }
         else if(!button.classList.contains('rules')){
             if (!gameOver && !button.classList.contains('X') && !button.classList.contains('O')) {
                 button.classList.add(turn);
