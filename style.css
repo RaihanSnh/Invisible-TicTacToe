@@ -57,6 +57,9 @@ h1 {
 
 .footer{
     height: 240px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .madeby{
@@ -121,7 +124,8 @@ button:focus {
 
 #replay {
     font-size: 24px;
-    padding: 8px 16px;
+    /* padding: 8px 16px; */
+    margin: auto;
     background-color: #333;
     color: #fff;
     border: none;
@@ -196,8 +200,4 @@ button:focus {
 
 .swal-text{
     text-align: left;
-}
-
-.turn{
-    padding: 5px 0px 5px 0px;
 }
